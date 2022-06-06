@@ -1,0 +1,53 @@
+#include <bits/stdc++.h> 
+/****************************************************************
+
+    Following is the class structure of the LinkedListNode class:
+
+    template <typename T>
+    class LinkedListNode
+    {
+    public:
+        T data;
+        LinkedListNode<T> *next;
+        LinkedListNode(T data)
+        {
+            this->data = data;
+            this->next = NULL;
+        }
+    };
+
+*****************************************************************/
+LinkedListNode<int> *reversell(LinkedListNode<int> *head){
+  LinkedListNode<int> *prev=NULL,*curr=head,*next=head;
+  while(curr!=NULL){
+    next=curr->next;
+    curr->next=prev;
+    prev=curr;
+    curr=next;
+  }
+  return prev;
+}
+bool isPalindrome(LinkedListNode<int> *head) {
+// base case
+if(head==NULL || head->next==NULL)
+   return true;
+LinkedListNode<int> *sp=head,*fp=head;
+// step-1 traverse slow pointer and fast pointer 
+// till slow reaches to just before middle element
+while(fp->next!=NULL && fp->next->next!=NULL){
+ sp=sp->next;
+ fp=fp->next->next;
+}
+// now middle is at slow->next
+// step-2 reverse the second half of linked list
+// i.e from middle to end
+sp->next=reversell(sp->next);
+sp=sp->next; // now slow is in the first node of second half of ll
+while(sp!=NULL){   // step-3 now compare both halfs nodes one by one 
+  if(head->data!=sp->data)
+      return false;  // if at any point they are not equal return false
+  head=head->next; // if equal move ahead and check all nodes one by one
+  sp=sp->next;
+}
+return true;  // if all nodes are checked and found equal it is palindrome
+}
